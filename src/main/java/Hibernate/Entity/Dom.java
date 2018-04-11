@@ -16,6 +16,7 @@ public class Dom {
     private String originalId;
     private String cost;
     private String name;
+    private String url;
     @Temporal(TemporalType.TIMESTAMP)
     private String date;
 
@@ -23,12 +24,13 @@ public class Dom {
 
     }
 
-    public Dom(String originalId, String name, String cost, String img) {
+    public Dom(String originalId, String name, String cost, String img, String url) {
         this.onCreate();
         this.originalId = originalId;
         this.name = name;
         this.cost = cost;
         this.img = img;
+        this.url = url;
     }
 
     @Id
@@ -87,6 +89,14 @@ public class Dom {
 
     public void setImg(String img) {
         this.img = img;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }
 

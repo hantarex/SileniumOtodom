@@ -70,6 +70,7 @@ public class MainClass {
             String originalId = element.getAttribute("data-tracking-id");
             String name = element.findElement(By.cssSelector("h3>a .text-nowrap .offer-item-title")).getText();
             String cost = element.findElement(By.cssSelector(".offer-item-details .offer-item-price")).getText();
+            String url = element.getAttribute("data-url");
 
             String imgStyle = element.findElement(By.cssSelector(".img-cover")).getAttribute("style");
             String img = null;
@@ -80,7 +81,7 @@ public class MainClass {
                 img = matcher.group(1);
             }
 
-            Dom dom = new Dom(originalId, name, cost, img);
+            Dom dom = new Dom(originalId, name, cost, img, url);
 
             try {
                 session = sessionFactory.openSession();

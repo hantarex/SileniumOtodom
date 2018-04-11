@@ -46,7 +46,7 @@ public class SendMail extends SendMailConfig {
         for (Dom dom: newDom){
             html.add(
                     "<h1>" + dom.getName() + "</h1>"
-                    + "<br/> <img src=\"" + dom.getImg() + "\" />"
+                    + "<br/> <a href=\"" + dom.getUrl() + "\"><img src=\"" + dom.getImg() + "\" /></a>"
                     + "<br/> <b>" + dom.getCost() + "</b>"
                     + "<br/> <span>" + dom.getDate() + "</span>"
             );

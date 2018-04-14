@@ -48,6 +48,7 @@ public class SendMail extends SendMailConfig {
                     "<h1>" + dom.getName() + "</h1>"
                     + "<br/> <a href=\"" + dom.getUrl() + "\"><img src=\"" + dom.getImg() + "\" /></a>"
                     + "<br/> <b>" + dom.getCost() + "</b>"
+                    + (dom.getOldCost()!=null ? "<br/><b style=\"color: red\">Old cost: " + dom.getOldCost() + "</b>": "")
                     + "<br/> <span>" + dom.getDate() + "</span>"
             );
         }

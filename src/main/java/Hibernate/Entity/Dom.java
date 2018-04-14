@@ -11,12 +11,16 @@ import java.text.SimpleDateFormat;
 @Entity
 @Table(name = "offer")
 public class Dom {
+    public static final int Otodom = 1;
+    public static final int Olx = 2;
     private String img;
     private Integer id;
     private String originalId;
     private String cost;
+    private String oldCost = null;
     private String name;
     private String url;
+    private Integer type = Otodom;
     @Temporal(TemporalType.TIMESTAMP)
     private String date;
 
@@ -24,13 +28,14 @@ public class Dom {
 
     }
 
-    public Dom(String originalId, String name, String cost, String img, String url) {
+    public Dom(String originalId, String name, String cost, String img, String url, int type) {
         this.onCreate();
         this.originalId = originalId;
         this.name = name;
         this.cost = cost;
         this.img = img;
         this.url = url;
+        this.type = type;
     }
 
     @Id
@@ -97,6 +102,22 @@ public class Dom {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getOldCost() {
+        return oldCost;
+    }
+
+    public void setOldCost(String oldCost) {
+        this.oldCost = oldCost;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
     }
 }
 

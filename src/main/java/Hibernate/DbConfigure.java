@@ -31,6 +31,7 @@ public class DbConfigure {
     }
 
     public boolean addEntry(Dom dom){
+        boolean isUpdate=false;
         try {
             session = sessionFactory.openSession();
             Query query = session.createQuery("from Dom where originalId = :id").setParameter("id", dom.getOriginalId());
@@ -38,11 +39,18 @@ public class DbConfigure {
             List<?> list = query.list();
 
             if(list.size()>0){
-                return false;
+                Dom oldDom = (Dom) list.get(0);
+
+                if(oldDom.getCost().equals(dom.getCost())) {
+                    return false;
+                }
+                oldDom.setOldCost(oldDom.getCost());
+                oldDom.setCost(dom.getCost());
+                dom=oldDom;
             }
 
             transaction = session.beginTransaction();
-            session.save(dom);
+            session.saveOrUpdate(dom);
             session.flush();
             transaction.commit();
             return true;

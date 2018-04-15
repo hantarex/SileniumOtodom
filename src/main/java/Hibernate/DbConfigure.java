@@ -6,13 +6,15 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+import java.io.Closeable;
+import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
 /**
  * Created by Arnold on 12.04.2018.
  */
-public class DbConfigure {
+public class DbConfigure implements Closeable {
     private final ServiceRegistry serviceRegistry;
     private final SessionFactory sessionFactory;
     private Session session = null;
@@ -30,7 +32,7 @@ public class DbConfigure {
             session = sessionFactory.openSession();
     }
 
-    public boolean addEntry(Dom dom){
+    synchronized public boolean addEntry(Dom dom){
         boolean isUpdate=false;
         try {
             session = sessionFactory.openSession();
@@ -57,10 +59,16 @@ public class DbConfigure {
         } catch (Exception e) {
             System.out.println(e);
         } finally {
-            if (session != null) {
-                session.close();
-            }
+            session.close();
         }
         return false;
+    }
+
+    public void close() throws IOException {
+        try {
+            session.close();
+        } catch (Exception e){
+
+        }
     }
 }

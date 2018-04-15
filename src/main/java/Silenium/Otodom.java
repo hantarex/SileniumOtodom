@@ -2,6 +2,7 @@ package Silenium;
 
 import Hibernate.DbConfigure;
 import Hibernate.Entity.Dom;
+import Service.ArrayThread;
 import org.checkerframework.checker.nullness.compatqual.NullableDecl;
 import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -17,15 +18,20 @@ import java.util.regex.Pattern;
 /**
  * Created by Arnold on 09.04.2018.
  */
-public class Otodom {
+public class Otodom implements Runnable {
     private static final int TIME_OUT_IN_SECONDS_NEXT_PAGE = 2;
+    private DbConfigure dbConfigure;
+    private ArrayThread<Dom> newDom;
     private String curPage=null;
     private static final int TIME_OUT_IN_SECONDS_POPUP = 2;
     public static final String OFFERS_ITEM_IN_LIST = ".col-md-content article.offer-item";
     private static String startPage = "https://www.otodom.pl/wynajem/mieszkanie/warszawa/?search%5Bfilter_float_price%3Ato%5D=3000&search%5Bfilter_enum_extras_types%5D%5B0%5D=garage&search%5Bphotos%5D=1&search%5Bdescription%5D=1&search%5Border%5D=created_at_first%3Adesc&search%5Bdist%5D=0&search%5Bsubregion_id%5D=197&search%5Bcity_id%5D=26&nrAdsPerPage=72";
     private RemoteWebDriver driver=null;
-    public Otodom() {
+
+    public Otodom(ArrayThread<Dom> newDom, DbConfigure dbConfigure) {
         driver = new FirefoxDriver();
+        this.newDom = newDom;
+        this.dbConfigure = dbConfigure;
     }
 
 
@@ -141,5 +147,15 @@ public class Otodom {
 //            i++;
         }
         return newDom;
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.newDom.merge(this.modifyDb(this.dbConfigure));
+            this.getDriver().close();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 }

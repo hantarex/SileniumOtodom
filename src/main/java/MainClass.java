@@ -1,11 +1,13 @@
 import Hibernate.Entity.Dom;
 import Hibernate.*;
 import Mail.SendMail;
+import Service.ArrayThread;
 import Silenium.Olx;
 import Silenium.Otodom;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,18 +23,25 @@ public class MainClass {
 
     public static void main(String[] args) throws InterruptedException {
         initSilenium();
-        DbConfigure dbConfigure = new DbConfigure();
 
-        ArrayList<Dom> newDom = new ArrayList<Dom>();
+        final ArrayThread<Dom> newDom = new ArrayThread<>();
 
-        Otodom otodom = new Otodom();
-        newDom.addAll(otodom.modifyDb(dbConfigure));
-        otodom.getDriver().close();
+        try (DbConfigure dbConfigure = new DbConfigure()) {
+            Otodom otodom = new Otodom(newDom, dbConfigure);
+            Olx olx = new Olx(newDom, dbConfigure);
 
-        Olx olx = new Olx();
-        newDom.addAll(olx.modifyDb(dbConfigure));
-        olx.getDriver().close();
+            Thread otodomThread = new Thread(otodom);
+            Thread olxThread = new Thread(olx);
 
+            otodomThread.start();
+            olxThread.start();
+
+            otodomThread.join();
+            olxThread.join();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         if(newDom.size()>0) {
             System.out.println("Send new!");
             (new SendMail()).send(newDom);

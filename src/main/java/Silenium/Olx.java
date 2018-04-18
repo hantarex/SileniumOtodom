@@ -25,7 +25,7 @@ public class Olx implements Runnable{
     private String curPage=null;
     private static final int TIME_OUT_IN_SECONDS_POPUP = 2;
     public static final String OFFERS_ITEM_IN_LIST = "#offers_table .wrap > .offer";
-    private static String startPage = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/q-warszawa/?search%5Bfilter_float_price%3Ato%5D=3000&search%5Bphotos%5D=1";
+    private static String startPage = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/q-warszawa/?search%5Bfilter_float_price%3Ato%5D=2300&search%5Bphotos%5D=1";
     private RemoteWebDriver driver=null;
     public Olx(ArrayThread<Dom> newDom, DbConfigure dbConfigure) {
         this.newDom = newDom;
